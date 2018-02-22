@@ -1,9 +1,9 @@
 # Starts with python:3.6.0-alpine and then installs most of python:2.7.13-alpine on top
 # to allows us to choose Python versions at runtime via: python2, python3, pip2, pip3, etc.
-FROM python:3.6.4-alpine
+FROM python:3.6.0-alpine
 
 ENV GPG_KEY C01E1CAD5EA2C4F0B8E3571504C367C218ADD4FF
-ENV PYTHON_VERSION 2.7.14
+ENV PYTHON_VERSION 2.7.13
 
 # if this is called "PIP_VERSION", pip explodes with "ValueError: invalid truth value '<VERSION>'"
 ENV PYTHON_PIP_VERSION 9.0.1
