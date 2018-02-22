@@ -1,9 +1,9 @@
 # Starts with python:3.6.0-alpine and then installs most of python:2.7.13-alpine on top
 # to allows us to choose Python versions at runtime via: python2, python3, pip2, pip3, etc.
-FROM python:3.6.0-alpine
+FROM python:3.6.4-alpine
 
 ENV GPG_KEY C01E1CAD5EA2C4F0B8E3571504C367C218ADD4FF
-ENV PYTHON_VERSION 2.7.13
+ENV PYTHON_VERSION 2.7.14
 
 # if this is called "PIP_VERSION", pip explodes with "ValueError: invalid truth value '<VERSION>'"
 ENV PYTHON_PIP_VERSION 9.0.1
@@ -18,7 +18,9 @@ RUN set -ex \
 	&& wget -O python.tar.xz "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz" \
 	&& wget -O python.tar.xz.asc "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz.asc" \
 	&& export GNUPGHOME="$(mktemp -d)" \
-	&& gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$GPG_KEY" \
+	&& ( gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$GPG_KEY" \
+	|| gpg --keyserver pgp.mit.edu --recv-keys "$GPG_KEY" \
+	|| gpg --keyserver keyserver.pgp.com --recv-keys "$GPG_KEY" ) \
 	&& gpg --batch --verify python.tar.xz.asc python.tar.xz \
 	&& rm -r "$GNUPGHOME" python.tar.xz.asc \
 	&& mkdir -p /usr/src/python \
